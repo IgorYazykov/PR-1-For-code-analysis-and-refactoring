@@ -1,5 +1,3 @@
-import math
-
 class Country:
     def __init__(self, name, xl, yl, xh, yh):
         self.name = name
@@ -7,26 +5,26 @@ class Country:
         self.yl = yl
         self.xh = xh
         self.yh = yh
-        self.euro = 1000000 
+        self.coins = 1000000  # Замена euro на coins для более общего понятия монеты
 
 def calculate_days_to_finish(countries):
     for country in countries:
         max_distance = max(country.xh - country.xl, country.yh - country.yl)
-        coins = country.euro
+        coins = country.coins
         days = 0
         while coins > 0:
             days += 1
-            updated_coins = 0  
+            total_transportable_coins = 0  # Замена updated_coins на более понятное имя
             for neighbor in countries:
                 if neighbor != country:
                     distance = max(abs(country.xl - neighbor.xl), abs(country.yl - neighbor.yl),
                                    abs(country.xh - neighbor.xh), abs(country.yh - neighbor.yh))
                     transportable_coins = min(coins, distance * 1000)
-                    neighbor.euro += transportable_coins
-                    updated_coins += transportable_coins 
-            coins -= updated_coins  
-            if updated_coins == 0:
-                break 
+                    neighbor.coins += transportable_coins
+                    total_transportable_coins += transportable_coins
+            coins -= total_transportable_coins  # Пересчет оставшихся монет после передачи соседям
+            if total_transportable_coins == 0 or coins == 0:  # Добавление условия выхода из цикла
+                break
         country.days_to_finish = days
 
 def simulate_coin_distribution(countries, case_number):
